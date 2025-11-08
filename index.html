@@ -1,0 +1,2068 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veritas AI - Healthcare AI Consulting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2d4a7c;
+            --accent: #4a6fa5;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--dark);
+            background: #fafbfc;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--white);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            /* -webkit-text-fill-color: transparent; */
+            background-clip: text;
+            letter-spacing: -0.5px;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            font-size: 1.2rem;
+            color: var(--white);
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .mobile-sidebar {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            transition: left 0.4s ease;
+            padding: 2rem;
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--white);
+        }
+
+        .sidebar-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--white);
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-nav a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            display: block;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(5px);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 7rem 4rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -50%;
+            left: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(118, 75, 162, 0.15) 0%, transparent 70%);
+            animation: float 15s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -50px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        .hero-content {
+            padding: 0 4rem;
+            color: var(--white);
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-visual {
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .consultancy-image {
+            position: relative;
+            width: 470px;
+            height: 400px;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            margin-right: -371px;
+        }
+
+        .consultancy-image img {
+            width: 100%;
+            height: 100%;
+            /* object-fit: cover;
+            filter: brightness(0.9); */
+        }
+
+        .consultancy-image::before {
+            /* content: ''; */
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            z-index: 1;
+        }
+
+        .floating-cards {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .float-card {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 1.3rem;
+            color: var(--white);
+            animation: floatCard 6s ease-in-out infinite;
+            width: 225px;
+        }
+
+        .float-card:nth-child(1) {
+            top: -76px;
+            left: -200px;
+            animation-delay: 0s;
+        }
+
+        .float-card:nth-child(2) {
+            top: -76px;
+            right: -60px;
+            animation-delay: 2s;
+        }
+
+        .float-card:nth-child(3) {
+            bottom: -100px;
+            left: 40px;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatCard {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 3vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2vw, 1.3rem);
+            margin-bottom: 2.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.8;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            /* color: var(--white); */
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f1f5f9;
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cta-btn:hover::before {
+            left: 100%;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 50px rgba(102, 126, 234, 0.5);
+        }
+
+        .section-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+        }
+
+        .about {
+            padding: 8rem 0;
+            background: var(--white);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            -webkit-background-clip: text;
+            /* -webkit-text-fill-color: transparent; */
+            background-clip: text;
+            letter-spacing: -1px;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.2rem;
+        }
+
+        .about-horizontal {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-bottom: 5rem;
+        }
+
+        .mission-box {
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            padding: 3rem;
+            border-radius: 24px;
+            color: var(--white);
+            /* box-shadow: 0 20px 60px rgba(102, 126, 234, 0.3); */
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.05),
+                /* existing soft inner shadow */
+                0 0 25px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 0.5;
+            }
+        }
+
+        .mission-box h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .mission-box p {
+            line-height: 1.8;
+            font-size: 1.05rem;
+            position: relative;
+            text-align: justify;
+        }
+
+        .vision-box {
+            background: var(--light);
+            padding: 3rem;
+            border-radius: 24px;
+            /* box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05); */
+            box-shadow:
+                0 10px 40px rgba(0, 0, 0, 0.05),
+                /* existing soft inner shadow */
+                0 0 25px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .vision-box h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .vision-box p {
+            color: var(--gray);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            text-align: justify;
+        }
+
+        .values-horizontal {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .values-slider-container {
+            display: none;
+            position: relative;
+            overflow: hidden;
+            padding: 0 1rem;
+        }
+
+        .values-slider {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            padding-bottom: 1rem;
+        }
+
+        .values-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .values-slider .value-card {
+            min-width: 280px;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+        }
+
+        .value-card {
+            padding: 2.5rem;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            border-color: black;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.2);
+        }
+
+        .value-card i {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            /* -webkit-text-fill-color: transparent; */
+            background-clip: text;
+            margin-bottom: 1.5rem;
+        }
+
+        .value-card h4 {
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-size: 1.3rem;
+        }
+
+        .value-card p {
+            color: var(--gray);
+            line-height: 1.7;
+
+        }
+
+        .services {
+            padding: 8rem 0;
+            background: var(--light);
+        }
+
+        .services-carousel {
+            position: relative;
+            height: 450px;
+            margin-top: 3rem;
+        }
+
+        .services-grid {
+            display: flex;
+            gap: 3rem;
+            position: relative;
+            height: 100%;
+        }
+
+        .service-card {
+            position: absolute;
+            padding: 3rem;
+            background: var(--white);
+            border-radius: 24px;
+            border: 2px solid transparent;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: 400px;
+            height: 400px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .service-card.center {
+            left: 50%;
+            transform: translateX(-50%) scale(1.1);
+            z-index: 3;
+            box-shadow: 0 30px 70px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .service-card.left {
+            left: 10%;
+            transform: translateX(-50%) scale(0.85);
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .service-card.right {
+            right: 10%;
+            transform: translateX(50%) scale(0.85);
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            /* background: linear-gradient(90deg, #667eea, #764ba2); */
+            background: black;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .service-card.center::before {
+            opacity: 1;
+        }
+
+        .service-card i {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            /* -webkit-text-fill-color: transparent; */
+            background-clip: text;
+            margin-bottom: 2rem;
+            display: block;
+        }
+
+        .service-card h3 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            color: var(--gray);
+            line-height: 1.8;
+            font-size: 1.05rem;
+            /* text-align: justify; */
+        }
+
+        .industries {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .industries::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                radial-gradient(circle at 20% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+        }
+
+        .industries-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .industry-card {
+            padding: 3rem 2rem;
+            background: var(--white);
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .industry-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .industry-card:hover::before {
+            opacity: 1;
+        }
+
+        .industry-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 30px 70px rgba(102, 126, 234, 0.3);
+        }
+
+        .industry-card i {
+            font-size: 4rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            /* -webkit-text-fill-color: transparent; */
+            background-clip: text;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s ease;
+            display: inline-block;
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            25% {
+                transform: translateY(-8px) rotate(3deg);
+            }
+
+            50% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            75% {
+                transform: translateY(-5px) rotate(-3deg);
+            }
+        }
+
+        .industry-card:nth-child(1) i {
+            animation-delay: 0s;
+        }
+
+        .industry-card:nth-child(2) i {
+            animation-delay: 0.5s;
+        }
+
+        .industry-card:nth-child(3) i {
+            animation-delay: 1s;
+        }
+
+        .industry-card:nth-child(4) i {
+            animation-delay: 1.5s;
+        }
+
+        .industry-card:nth-child(5) i {
+            animation-delay: 2s;
+        }
+
+        .industry-card:nth-child(6) i {
+            animation-delay: 2.5s;
+        }
+
+        .industry-card:hover i {
+            -webkit-text-fill-color: var(--white);
+            transform: scale(1.1);
+            animation: iconMove 0.6s ease-in-out;
+        }
+
+        @keyframes iconMove {
+
+            0%,
+            100% {
+                transform: scale(1.1) translateY(0);
+            }
+
+            25% {
+                transform: scale(1.1) translateY(-10px) rotate(5deg);
+            }
+
+            50% {
+                transform: scale(1.1) translateY(0) rotate(-5deg);
+            }
+
+            75% {
+                transform: scale(1.1) translateY(-5px) rotate(3deg);
+            }
+        }
+
+        .industry-card h3 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+            transition: color 0.4s ease;
+        }
+
+        .industry-card:hover h3 {
+            color: var(--white);
+        }
+
+        .clients {
+            padding: 8rem 0;
+            background: var(--white);
+        }
+
+        .clients-carousel {
+            position: relative;
+            overflow: hidden;
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 2rem;
+            animation: continuousScroll 40s linear infinite;
+        }
+
+        @keyframes continuousScroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(calc(-350px * 10 - 2rem * 10));
+            }
+        }
+
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        .client-card {
+            min-width: 350px;
+            padding: 2.5rem;
+            background: var(--white);
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .client-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+        }
+
+        .client-card:nth-child(10n+1)::before {
+            /* background: var(--gradient-1); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+2)::before {
+            /* background: var(--gradient-2); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+3)::before {
+            /* background: var(--gradient-3); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+4)::before {
+            /* background: var(--gradient-4); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+5)::before {
+            /* background: var(--gradient-5); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+6)::before {
+            /* background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+7)::before {
+            /* background: var(--gradient-1); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+8)::before {
+            /* background: var(--gradient-2); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+9)::before {
+            /* background: var(--gradient-3); */
+            background: black;
+        }
+
+        .client-card:nth-child(10n+10)::before {
+            /* background: var(--gradient-4); */
+            background: black;
+        }
+
+        .client-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .client-card h4 {
+            color: black;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .client-card p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .client-card a {
+            color: black;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: gap 0.3s ease;
+        }
+
+        .client-card a:hover {
+            gap: 1rem;
+        }
+
+        .contact {
+            padding: 8rem 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .contact .section-header h2,
+        .contact .section-header p {
+            color: var(--white);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 5rem;
+            align-items: start;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .contact-info h3 {
+            color: var(--white);
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .contact-item i {
+            font-size: 1.8rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .social-links a {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: var(--white);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px) rotate(5deg);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .contact-form {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 24px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1.2rem;
+            border: 2px solid var(--light);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: var(--light);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.3rem;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        footer {
+            background: var(--dark);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-column p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.8;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            color: #667eea;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+
+        .animate-on-scroll.animated {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 10rem 2rem 4rem;
+            }
+
+            .hero-content,
+            .hero-visual {
+                padding: 0 1rem;
+            }
+
+            .about-horizontal {
+                grid-template-columns: 1fr;
+            }
+
+            .values-horizontal {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .industries-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 1.2rem 2rem;
+            }
+
+            .section-container {
+                padding: 0 2rem;
+            }
+
+            .service-card {
+                width: 350px;
+            }
+
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem !important;
+            }
+
+            hero p {
+                font-size: clamp(1.1rem, 2vw, 1.3rem);
+                margin-bottom: 2.5rem;
+                color: rgba(255, 255, 255, 0.9);
+                line-height: 1.8;
+            }
+
+            .consultancy-image {
+                width: 100%;
+                height: auto;
+                margin-right: -355px;
+                margin-top: 78px;
+            }
+
+            .floating-cards {
+                width: 100%;
+                height: 350px;
+            }
+
+            .float-card {
+                width: 130px;
+                padding: 1.5rem;
+                margin-right: 45px;
+                margin-top: 129px;
+            }
+
+            .float-card:nth-child(1) {
+                top: -109px;
+                left: -23px;
+            }
+
+            .float-card:nth-child(2) {
+                top: -104px;
+                right: -70px;
+                animation-delay: 2s;
+            }
+
+
+            .float-card:nth-child(3) {
+                top: 149px;
+                left: 116px;
+                bottom: auto;
+            }
+
+            .float-card h4 {
+                font-size: 0.8rem;
+            }
+
+            .float-card i {
+                font-size: 1.5rem !important;
+            }
+
+            .values-horizontal {
+                display: none;
+            }
+
+            .values-slider-container {
+                display: block;
+                max-width: 100%;
+                margin: 0 auto;
+            }
+
+            .values-slider {
+                padding: 1rem 0.5rem;
+            }
+
+            .values-slider .value-card {
+                min-width: 85%;
+                max-width: 85%;
+                height: auto;
+            }
+
+            .services-grid {
+                display: block;
+            }
+
+            .service-card {
+                position: relative !important;
+                width: 100%;
+                height: auto;
+                margin-bottom: 2rem;
+                transform: none !important;
+                opacity: 1 !important;
+                left: auto !important;
+                right: auto !important;
+            }
+
+            .service-card.center,
+            .service-card.left,
+            .service-card.right {
+                position: relative !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+
+            .services-carousel {
+                height: auto;
+            }
+
+            .industries-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .client-card {
+                min-width: 260px;
+                padding: 2rem;
+            }
+
+            .client-card h4 {
+                font-size: 1rem;
+            }
+
+            .client-card p {
+                font-size: 0.85rem;
+            }
+
+            @keyframes continuousScroll {
+                0% {
+                    transform: translateX(0);
+                }
+
+                100% {
+                    transform: translateX(calc(-260px * 10 - 2rem * 10));
+                }
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                padding: 1.2rem 1.5rem;
+            }
+
+            .section-container {
+                padding: 0 1.5rem;
+            }
+
+            .hero {
+                padding: 10rem 1.5rem 4rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            @media (max-width: 768px) {
+                .footer-column:nth-child(2) {
+                    /* Targets the Quick Links column */
+                    display: none;
+                }
+            }
+
+
+        }
+
+
+        @media (max-width: 640px) {
+            .footer-column:nth-child(2) {
+                /* Targets the Quick Links column */
+                display: none;
+            }
+
+            .consultancy-image {
+                width: 100%;
+                height: auto;
+                margin-right: -308px;
+                margin-top: 78px;
+            }
+
+            .float-card:nth-child(2) {
+                top: -104px;
+                right: -80px;
+                animation-delay: 2s;
+            }
+
+            .float-card:nth-child(3) {
+                top: 149px;
+                left: 102px;
+                bottom: auto;
+            }
+        }
+
+
+        @media (max-width: 932px) {
+            .consultancy-image {
+                width: 100%;
+                height: auto;
+                margin-right: -350px;
+                margin-top: 78px;
+            }
+
+            .float-card:nth-child(2) {
+                top: -104px;
+                right: -73px;
+                animation-delay: 2s;
+            }
+
+            .float-card:nth-child(3) {
+                top: 149px;
+                left: 116px;
+                bottom: auto;
+            }
+
+            .float-card:nth-child(1) {
+                top: -109px;
+                left: -24px;
+            }
+        }
+
+
+                @media (max-width: 375px) {
+            .consultancy-image {
+                width: 100%;
+                height: auto;
+                margin-right: -308px;
+                margin-top: 78px;
+            }
+
+            .float-card:nth-child(2) {
+                top: -104px;
+                right: -82px;
+                animation-delay: 2s;
+            }
+
+            .float-card:nth-child(3) {
+                top: 149px;
+                left: 99px;
+                bottom: auto;
+            }
+
+            .float-card:nth-child(1) {
+                top: -109px;
+                left: -2px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">Veritas AI</div>
+            <button class="sidebar-close" id="sidebarClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <ul class="sidebar-nav">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#industries">Industries</a></li>
+            <li><a href="#clients">Clients</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </div>
+
+    <header id="header">
+        <nav>
+            <div class="logo" onclick="window.location.href='#home'">Veritas AI</div>
+
+            <button class="mobile-toggle" id="mobileToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#industries">Industries</a></li>
+                <li><a href="#clients">Clients</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Guiding Healthcare Organizations in Responsible AI Adoption</h1>
+            <p>Expert consulting in AI governance, ethics, regulatory compliance, and strategic planning for the
+                healthcare sector.</p>
+            <a href="#contact" class="cta-btn">Get Started Today</a>
+        </div>
+        <div class="hero-visual">
+            <div class="consultancy-image">
+                <img src="hero.jpg" alt="Healthcare AI Consulting">
+            </div>
+            <div class="floating-cards">
+                <div class="float-card">
+                    <i class="fas fa-shield-alt" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h4>AI Governance</h4>
+                </div>
+                <div class="float-card">
+                    <i class="fas fa-balance-scale" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h4>Ethics & Compliance</h4>
+                </div>
+                <div class="float-card">
+                    <i class="fas fa-chart-line" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                    <h4>Strategic Planning</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>About Veritas AI</h2>
+                <p>Building a future where AI serves as a force for good</p>
+            </div>
+
+            <div class="about-horizontal">
+                <div class="mission-box animate-on-scroll">
+                    <h3>Our Mission</h3>
+                    <p>To guide healthcare organizations in the ethical and compliant adoption of artificial
+                        intelligence, fostering responsible innovation, strengthening organizational leadership, and
+                        ultimately improving patient outcomes and trust in AI-driven healthcare.</p>
+                </div>
+                <div class="vision-box animate-on-scroll">
+                    <h3>Our Vision</h3>
+                    <p>To be the leading and most trusted partner for healthcare organizations seeking to leverage the
+                        transformative power of AI with unwavering integrity, ensuring a future where AI advancements
+                        are seamlessly integrated to enhance health and well-being for all.</p>
+                </div>
+            </div>
+
+            <div class="values-horizontal">
+                <div class="value-card animate-on-scroll">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Integrity</h4>
+                    <p>Upholding the highest ethical standards with transparency and accountability</p>
+                </div>
+                <div class="value-card animate-on-scroll">
+                    <i class="fas fa-heart"></i>
+                    <h4>Patient-Centric</h4>
+                    <p>Prioritizing patient well-being in all AI strategies and implementations</p>
+                </div>
+                <div class="value-card animate-on-scroll">
+                    <i class="fas fa-award"></i>
+                    <h4>Excellence</h4>
+                    <p>Delivering high-quality, evidence-based consulting services</p>
+                </div>
+                <div class="value-card animate-on-scroll">
+                    <i class="fas fa-handshake"></i>
+                    <h4>Collaboration</h4>
+                    <p>Building strong partnerships with clients for lasting success</p>
+                </div>
+            </div>
+
+            <div class="values-slider-container">
+                <div class="values-slider" id="valuesSlider">
+                    <div class="value-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h4>Integrity</h4>
+                        <p>Upholding the highest ethical standards with transparency and accountability</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-heart"></i>
+                        <h4>Patient-Centric</h4>
+                        <p>Prioritizing patient well-being in all AI strategies and implementations</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-award"></i>
+                        <h4>Excellence</h4>
+                        <p>Delivering high-quality, evidence-based consulting services</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-handshake"></i>
+                        <h4>Collaboration</h4>
+                        <p>Building strong partnerships with clients for lasting success</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Our Services</h2>
+                <p>Specialized consulting tailored to your unique needs</p>
+            </div>
+            <div class="services-carousel">
+                <div class="services-grid" id="servicesGrid">
+                    <div class="service-card center" data-index="0">
+                        <i class="fas fa-balance-scale"></i>
+                        <h3>AI Governance & Ethics</h3>
+                        <p>Developing comprehensive frameworks for responsible AI implementation, ethical guidelines,
+                            and governance structures that align with healthcare regulations and organizational values.
+                        </p>
+                    </div>
+                    <div class="service-card right" data-index="1">
+                        <i class="fas fa-clipboard-check"></i>
+                        <h3>Regulatory Compliance</h3>
+                        <p>Ensuring AI systems meet healthcare regulatory requirements including HIPAA, FDA guidelines,
+                            and emerging AI-specific regulations to mitigate compliance risks.</p>
+                    </div>
+                    <div class="service-card left" data-index="2">
+                        <i class="fas fa-chess-board"></i>
+                        <h3>Strategic Planning</h3>
+                        <p>Developing strategic roadmaps for AI integration that align with organizational goals,
+                            optimize resources, and maximize return on investment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="industries" id="industries">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Industries We Serve</h2>
+                <p>Specialized expertise across the healthcare ecosystem</p>
+            </div>
+            <div class="industries-grid">
+                <div class="industry-card animate-on-scroll">
+                    <i class="fas fa-hospital"></i>
+                    <h3>Healthcare</h3>
+                </div>
+                <div class="industry-card animate-on-scroll">
+                    <i class="fas fa-laptop-medical"></i>
+                    <h3>Health I.T.</h3>
+                </div>
+                <div class="industry-card animate-on-scroll">
+                    <i class="fas fa-robot"></i>
+                    <h3>AI MedTech</h3>
+                </div>
+                <div class="industry-card animate-on-scroll">
+                    <i class="fas fa-heartbeat"></i>
+                    <h3>HealthTech Startups</h3>
+                </div>
+                <div class="industry-card animate-on-scroll">
+                    <i class="fas fa-clinic-medical"></i>
+                    <h3>Healthcare Systems</h3>
+                </div>
+                <div class="industry-card animate-on-scroll">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>IT Entrepreneurs</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="clients" id="clients">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Our Valued Clients</h2>
+                <p>Partnering with innovative organizations across healthcare</p>
+            </div>
+            <div class="clients-carousel">
+                <div class="carousel-track">
+                    <div class="client-card">
+                        <h4>Institute for AI Governance in Healthcare</h4>
+                        <p>Leading organization advancing responsible AI governance frameworks in healthcare systems.
+                        </p>
+                        <a href="https://www.iaigh.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>One Patient, One Cure</h4>
+                        <p>Pioneering personalized medicine solutions for rare disease patients worldwide.</p>
+                        <a href="https://onepatientonecure.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>SolvedHealth.AI</h4>
+                        <p>Innovative AI platform transforming healthcare delivery and patient outcomes.</p>
+                        <a href="https://solvedhealth.ai/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>HealthTasks.AI</h4>
+                        <p>Streamlining healthcare workflows with intelligent task management solutions.</p>
+                        <a href="https://healthtasks.ai/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>AcquisitionAI</h4>
+                        <p>AI-powered platform revolutionizing healthcare acquisition strategies.</p>
+                        <a href="https://acquisitionai.com/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Alliance for American Leadership</h4>
+                        <p>Fostering leadership excellence in healthcare innovation and policy.</p>
+                        <a href="https://a4al.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>AI Governance Network</h4>
+                        <p>Global network advancing ethical AI governance and best practices.</p>
+                        <a href="https://aign.global/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Global Council for Responsible AI</h4>
+                        <p>International coalition promoting responsible AI development and deployment.</p>
+                        <a href="https://leadmind.inteligenca.com/global-council-for-responsible-ai/"
+                            target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Global Alliance for Artificial Intelligence</h4>
+                        <p>Worldwide initiative advancing AI innovation for social good.</p>
+                        <a href="https://www.gafai.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>BioExpert Network</h4>
+                        <p>Connecting biotech experts with cutting-edge research opportunities.</p>
+                        <a href="https://bioexpertnetwork.com/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Institute for AI Governance in Healthcare</h4>
+                        <p>Leading organization advancing responsible AI governance frameworks in healthcare systems.
+                        </p>
+                        <a href="https://www.iaigh.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>One Patient, One Cure</h4>
+                        <p>Pioneering personalized medicine solutions for rare disease patients worldwide.</p>
+                        <a href="https://onepatientonecure.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>SolvedHealth.AI</h4>
+                        <p>Innovative AI platform transforming healthcare delivery and patient outcomes.</p>
+                        <a href="https://solvedhealth.ai/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>HealthTasks.AI</h4>
+                        <p>Streamlining healthcare workflows with intelligent task management solutions.</p>
+                        <a href="https://healthtasks.ai/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>AcquisitionAI</h4>
+                        <p>AI-powered platform revolutionizing healthcare acquisition strategies.</p>
+                        <a href="https://acquisitionai.com/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Alliance for American Leadership</h4>
+                        <p>Fostering leadership excellence in healthcare innovation and policy.</p>
+                        <a href="https://a4al.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>AI Governance Network</h4>
+                        <p>Global network advancing ethical AI governance and best practices.</p>
+                        <a href="https://aign.global/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Global Council for Responsible AI</h4>
+                        <p>International coalition promoting responsible AI development and deployment.</p>
+                        <a href="https://leadmind.inteligenca.com/global-council-for-responsible-ai/"
+                            target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>Global Alliance for Artificial Intelligence</h4>
+                        <p>Worldwide initiative advancing AI innovation for social good.</p>
+                        <a href="https://www.gafai.org/" target="_blank">Visit Website →</a>
+                    </div>
+                    <div class="client-card">
+                        <h4>BioExpert Network</h4>
+                        <p>Connecting biotech experts with cutting-edge research opportunities.</p>
+                        <a href="https://bioexpertnetwork.com/" target="_blank">Visit Website →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="section-container">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Let's discuss how we can help your organization thrive</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info animate-on-scroll">
+                    <h3>Contact Information</h3>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <strong>Email</strong><br>
+                            Jordan@Veritasaic.com
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-building"></i>
+                        <div>
+                            <strong>Company</strong><br>
+                            Veritas AI Consulting Firm
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/company/veritas-ai-consulting-firm/" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="mailto:Jordan@Veritasaic.com">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-form animate-on-scroll">
+                    <form id="contactForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name">Full Name</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="section-container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Veritas AI</h3>
+                    <p>Guiding healthcare organizations in the ethical and compliant adoption of artificial intelligence
+                        for a better tomorrow.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#industries">Industries</a></li>
+                        <li><a href="#clients">Clients</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="mailto:Jordan@Veritasaic.com">Jordan@Veritasaic.com</a></li>
+                        <li><a href="https://www.linkedin.com/company/veritas-ai-consulting-firm/"
+                                target="_blank">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Veritas AI Consulting. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileToggle = document.getElementById('mobileToggle');
+        const mobileSidebar = document.getElementById('mobileSidebar');
+        const sidebarClose = document.getElementById('sidebarClose');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        mobileToggle.addEventListener('click', () => {
+            mobileSidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+        });
+
+        sidebarClose.addEventListener('click', () => {
+            mobileSidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            mobileSidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        document.querySelectorAll('.sidebar-nav a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileSidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+            });
+        });
+
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Services Carousel - One card rotates every 3 seconds
+        if (window.innerWidth > 768) {
+            const serviceCards = document.querySelectorAll('.service-card');
+            let currentIndex = 0;
+            let autoRotateInterval;
+
+            function rotateServices() {
+                // Move current center to left
+                const currentCenter = document.querySelector('.service-card.center');
+                if (currentCenter) {
+                    currentCenter.classList.remove('center');
+                    currentCenter.classList.add('left');
+                }
+
+                // Move current right to center
+                const currentRight = document.querySelector('.service-card.right');
+                if (currentRight) {
+                    currentRight.classList.remove('right');
+                    currentRight.classList.add('center');
+                }
+
+                // Find next card to become right
+                currentIndex = (currentIndex + 1) % serviceCards.length;
+                const nextRightIndex = (currentIndex + 1) % serviceCards.length;
+
+                serviceCards[nextRightIndex].classList.remove('left', 'center');
+                serviceCards[nextRightIndex].classList.add('right');
+            }
+
+            // Auto-rotate every 3 seconds
+            function startAutoRotate() {
+                autoRotateInterval = setInterval(rotateServices, 3000);
+            }
+
+            function stopAutoRotate() {
+                clearInterval(autoRotateInterval);
+            }
+
+            startAutoRotate();
+
+            // Click to navigate
+            serviceCards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    if (!card.classList.contains('center')) {
+                        stopAutoRotate();
+
+                        serviceCards.forEach(c => c.classList.remove('center', 'left', 'right'));
+
+                        card.classList.add('center');
+                        const nextIndex = (index + 1) % serviceCards.length;
+                        const prevIndex = (index - 1 + serviceCards.length) % serviceCards.length;
+
+                        serviceCards[nextIndex].classList.add('right');
+                        serviceCards[prevIndex].classList.add('left');
+
+                        currentIndex = index;
+
+                        setTimeout(startAutoRotate, 5000);
+                    }
+                });
+            });
+
+            // Hover pause
+            const servicesCarousel = document.querySelector('.services-carousel');
+            if (servicesCarousel) {
+                servicesCarousel.addEventListener('mouseenter', stopAutoRotate);
+                servicesCarousel.addEventListener('mouseleave', startAutoRotate);
+            }
+        }
+
+        document.getElementById('contactForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Thank you for your message! We will get back to you soon.');
+            this.reset();
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                } else {
+                    entry.target.classList.remove('animated');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>
